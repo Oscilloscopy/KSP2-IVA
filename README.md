@@ -3,7 +3,7 @@ Drag and drop the KSP x64 data folder into your KSP 2 root directory (/Kerbal Sp
 
 
 Press C to go into IVA mode. 
-(Only works with these command capsules):
+
 
 
 
