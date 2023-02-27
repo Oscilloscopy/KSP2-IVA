@@ -1,4 +1,4 @@
-﻿
+
 using KSP.DebugTools;
 using KSP.Sim.impl;
 using SpaceWarp.API;
@@ -19,6 +19,8 @@ namespace Autostrut
 
         Camera cam1 = null;
         Camera cam2 = null;
+        List<Camera> kerbalCams = new List<Camera>();
+        int camIndex = 0;
         float zoom;
         float xrot = 0.001f;
         float yrot = 0.625f;
@@ -28,11 +30,49 @@ namespace Autostrut
         Vector3 origrot = Vector3.zero;
         float origfov;
         
+        void leaveIVA()
+        {
+            //Getting out of iva
+            cam1.transform.SetParent(origparent);
+            cam1.transform.localPosition = origloc;
+            cam1.transform.localEulerAngles = origrot;
+            cam1.fieldOfView = origfov;
+        }
+        void enterIVA()
+        {
+            //Getting into iva
+            cam2 = kerbalCams[camIndex];
+            origparent = cam1.transform.parent;
+            origloc = cam1.transform.localPosition;
+            origrot = cam1.transform.localEulerAngles;
+            origfov = cam1.fieldOfView;
+            cam1.transform.SetParent(cam2.transform.parent);
+        }
+
+        void cameraYoga()
+        {
+            cam1.transform.position = cam2.transform.position;
+            cam1.transform.rotation = cam2.transform.rotation;
+            cam1.transform.localPosition = new Vector3(-0.001f, 0.625f, 0.1f);
+            cam1.transform.localEulerAngles = new Vector3(-0.001f, 0.625f, 0.208f);
+        }
         void Update()
         {
+            //Change IVA camera (if more than one)
+            if (IVA && Input.GetKeyDown(KeyCode.V))
+            {
+                camIndex++;
+                if (camIndex > kerbalCams.Count)
+                    camIndex = 0;
+                cam2 = kerbalCams[camIndex];
+                leaveIVA();
+                enterIVA();
+                cameraYoga();
+            }
             //Change IVA on C keypress
             if (Input.GetKeyDown(KeyCode.C))
             {
+                kerbalCams.Clear();
                 //Find the 2 cameras
                 Camera[] cameras = (Camera[])GameObject.FindObjectsOfType(typeof(Camera));
                 foreach (Camera c in cameras)
@@ -45,36 +85,36 @@ namespace Autostrut
                     }
                     if (c.name == "kerbalCam")
                     {
-                        cam2 = c;
-
+                        //cam2 = c;
+                        kerbalCams.Add(c);
                     }
 
                 }
+                //Debug.Log(kerbalCams.Count());
+                //Debug.Log(camIndex);
+                /*
+                foreach (Camera c in kerbalCams)
+                {
+
+                    Debug.Log(c);
+                }
+                */
+
+                cam2 = kerbalCams[camIndex];
+                
                 if (IVA)
                 {
                     
-                    //Getting out of iva
-                    cam1.transform.SetParent(origparent);
-                    cam1.transform.localPosition = origloc;
-                    cam1.transform.localEulerAngles = origrot;
-                    cam1.fieldOfView = origfov;
+                    leaveIVA();
                     
                 }
                 else
                 {
-                    //Getting into iva
-                    origparent = cam1.transform.parent;
-                    origloc = cam1.transform.localPosition;
-                    origrot = cam1.transform.localEulerAngles;
-                    origfov = cam1.fieldOfView;
-                    cam1.transform.SetParent(cam2.transform.parent);
+                    enterIVA();
                 }
 
                 //Do some camera yoga
-                cam1.transform.position = cam2.transform.position;
-                cam1.transform.rotation = cam2.transform.rotation;
-                cam1.transform.localPosition = new Vector3(-0.001f, 0.625f, 0.1f);
-                cam1.transform.localEulerAngles = new Vector3(-0.001f, 0.625f, 0.208f);
+                cameraYoga();
 
                 cam1.nearClipPlane = 0.02f;
                 IVA = !IVA;
