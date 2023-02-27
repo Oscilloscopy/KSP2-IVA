@@ -1,5 +1,7 @@
 MOD USES SpaceWarp LOADER or BePinEx+Spacewarp Plugin
 
+(only supports SW 0.1 for now, im already working on the 0.2 compatible version)
+
 Drag and drop the folder included in the .zip file into the ksp 2 directory.
 Remember to use the right version for your install.
 
