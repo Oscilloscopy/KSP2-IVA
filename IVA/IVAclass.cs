@@ -1,7 +1,7 @@
 
 using KSP.DebugTools;
 using KSP.Sim.impl;
-using SpaceWarp.API;
+using BepInEx;
 using UnityEngine;
 using KSP.Game;
 using System;
@@ -11,10 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using KSP.Logging;
 
-namespace Autostrut
+namespace IVA
 {
-
-    public class IVAclass : Mod
+    [BepInPlugin("stuff.Mudkip.IVA", "IVA Plugin for KSP 2", "0.2.5.0")]
+    public class IVAclass : BaseUnityPlugin
     {
 
         Camera cam1 = null;
@@ -29,8 +29,9 @@ namespace Autostrut
         Vector3 origloc = Vector3.zero;
         Vector3 origrot = Vector3.zero;
         float origfov;
-        
-        void leaveIVA()
+
+  
+            void leaveIVA()
         {
             //Getting out of iva
             cam1.transform.SetParent(origparent);
