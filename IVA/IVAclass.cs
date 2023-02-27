@@ -31,6 +31,7 @@ namespace Autostrut
         Vector3 origloc = Vector3.zero;
         Vector3 origrot = Vector3.zero;
         float origfov;
+        float orignearclip;
         
         void leaveIVA()
         {
@@ -39,6 +40,7 @@ namespace Autostrut
             cam1.transform.localPosition = origloc;
             cam1.transform.localEulerAngles = origrot;
             cam1.fieldOfView = origfov;
+            cam1.nearClipPlane = orignearclip;
         }
         void enterIVA()
         {
@@ -48,6 +50,8 @@ namespace Autostrut
             origloc = cam1.transform.localPosition;
             origrot = cam1.transform.localEulerAngles;
             origfov = cam1.fieldOfView;
+            orignearclip = cam1.nearClipPlane;
+            cam1.nearClipPlane = 0.02f;
             cam1.transform.SetParent(cam2.transform.parent);
         }
 
@@ -118,7 +122,7 @@ namespace Autostrut
                 //Do some camera yoga
                 cameraYoga();
 
-                cam1.nearClipPlane = 0.02f;
+                
                 IVA = !IVA;
                 //Hide or show the kerbal body (Set active did some weird stuff)
                 if (IVA)
