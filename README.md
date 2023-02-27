@@ -1,4 +1,4 @@
-MOD USES SpaceWarp LOADER or BePinEx
+MOD USES SpaceWarp LOADER or BePinEx+Spacewarp Plugin
 
 Drag and drop the folder included in the .zip file into the ksp 2 directory.
 Remember to use the right version for your install.
